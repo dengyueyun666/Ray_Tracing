@@ -8,7 +8,7 @@ using namespace std;
 int main() {
   int nx = 200;
   int ny = 100;
-  fstream fs("image.ppm", ios::out);
+  fstream fs("image.ppm",  ios::out);
   fs << "P3\n" << nx << " " << ny << "\n255\n";
   for (int j = ny - 1; j >= 0; j--) {
     for (int i = 0; i < nx; i++) {
