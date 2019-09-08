@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 
+#include "bvh.h"
 #include "camera.h"
 #include "float.h"
 #include "hitable_list.h"
@@ -54,13 +55,14 @@ hitable* random_scene()
     list[i++] = new sphere(vec3(-4, 1, 0), 1.0, new lambertian(vec3(0.4, 0.2, 0.1)));
     list[i++] = new sphere(vec3(4, 1, 0), 1.0, new metal(vec3(0.7, 0.6, 0.5), 0.0));
 
-    return new hitable_list(list, i);
+    // return new hitable_list(list, i);
+    return new bvh_node(list, i, 0, 1);
 }
 
 int main(int argc, char** argv)
 {
-    int nx = 400;
-    int ny = 200;
+    int nx = 1200;
+    int ny = 600;
     int ns = 100;
     string filename;
     if (argc == 1)

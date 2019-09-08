@@ -15,6 +15,7 @@ public:
         , mat_ptr(m){};
 
     virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const;
+    virtual bool bounding_box(float t0, float t1, aabb& box) const;
     vec3 center(float time) const;
 
     vec3 center0, center1;
@@ -26,6 +27,14 @@ public:
 vec3 moving_sphere::center(float time) const
 {
     return center0 + ((time - time0) / (time1 - time0)) * (center1 - center0);
+}
+
+bool moving_sphere::bounding_box(float t0, float t1, aabb& box) const
+{
+    aabb box0(center(time0) - vec3(radius, radius, radius), center(time0) + vec3(radius, radius, radius));
+    aabb box1(center(time1) - vec3(radius, radius, radius), center(time1) + vec3(radius, radius, radius));
+    box = surrounding_box(box0, box1);
+    return true;
 }
 
 bool moving_sphere::hit(const ray& r, float t_min, float t_max, hit_record& rec) const
