@@ -8,7 +8,7 @@ vec3 random_in_unit_sphere()
 {
     vec3 p;
     do {
-        p = 2.0 * vec3(drand48(), drand48(), drand48()) - vec3(1, 1, 1);
+        p = 2.0 * vec3(rand_float(), rand_float(), rand_float()) - vec3(1, 1, 1);
     } while (p.squared_length() >= 1.0);
     return p;
 }
@@ -51,7 +51,7 @@ public:
     virtual bool scatter(const ray& r_in, const hit_record& rec, vec3& attenuation, ray& scattered) const
     {
         vec3 target = rec.p + rec.normal + random_in_unit_sphere();
-        scattered = ray(rec.p, target - rec.p);
+        scattered = ray(rec.p, target - rec.p, r_in.time());
         attenuation = albedo;
         return true;
     }
@@ -112,7 +112,7 @@ public:
         } else {
             reflect_prob = 1.0;
         }
-        if (drand48() < reflect_prob)
+        if (rand_float() < reflect_prob)
             scattered = ray(rec.p, reflected);
         else
             scattered = ray(rec.p, refracted);
