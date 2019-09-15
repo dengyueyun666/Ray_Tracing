@@ -34,9 +34,18 @@ hitable* two_sphere()
 {
     texture* checker = new checker_texture(new constant_texture(vec3(0.2, 0.3, 0.1)), new constant_texture(vec3(0.9, 0.9, 0.9)));
     int n = 50;
-    hitable **list = new hitable*[n+1];
-    list[0] = new sphere(vec3(0,-10,0),10,new lambertian(checker));
-    list[1] = new sphere(vec3(0, 10,0),10,new lambertian(checker));
+    hitable** list = new hitable*[n + 1];
+    list[0] = new sphere(vec3(0, -10, 0), 10, new lambertian(checker));
+    list[1] = new sphere(vec3(0, 10, 0), 10, new lambertian(checker));
+    return new hitable_list(list, 2);
+}
+
+hitable* two_perlin_sphere()
+{
+    texture* pertext = new noise_texture(4);
+    hitable** list = new hitable*[2];
+    list[0] = new sphere(vec3(0, -1000, 0), 1000, new lambertian(pertext));
+    list[1] = new sphere(vec3(0, 2, 0), 2, new lambertian(pertext));
     return new hitable_list(list,2);
 }
 
@@ -85,7 +94,8 @@ int main(int argc, char** argv)
     fs << "P3\n"
        << nx << " " << ny << "\n255\n";
     // hitable* world = random_scene();
-    hitable* world = two_sphere();
+    // hitable* world = two_sphere();
+    hitable* world = two_perlin_sphere();
 
     vec3 lookfrom(13, 2, 3);
     vec3 lookat(0, 0, 0);
