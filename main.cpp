@@ -1,6 +1,8 @@
 #include <fstream>
 #include <iostream>
 
+#define STB_IMAGE_IMPLEMENTATION
+
 #include "bvh.h"
 #include "camera.h"
 #include "float.h"
@@ -8,6 +10,8 @@
 #include "material.h"
 #include "moving_sphere.h"
 #include "sphere.h"
+#include "stb_image.h"
+#include "surface_texture.h"
 #include "texture.h"
 
 using namespace std;
@@ -46,7 +50,15 @@ hitable* two_perlin_sphere()
     hitable** list = new hitable*[2];
     list[0] = new sphere(vec3(0, -1000, 0), 1000, new lambertian(pertext));
     list[1] = new sphere(vec3(0, 2, 0), 2, new lambertian(pertext));
-    return new hitable_list(list,2);
+    return new hitable_list(list, 2);
+}
+
+hitable* earth()
+{
+    int nx, ny, nn;
+    unsigned char* tex_data = stbi_load("earthmap.jpg", &nx, &ny, &nn, 0);
+    material* mat = new lambertian(new image_texture(tex_data, nx, ny));
+    return new sphere(vec3(0, 0, 0), 2, mat);
 }
 
 hitable* random_scene()
@@ -95,7 +107,8 @@ int main(int argc, char** argv)
        << nx << " " << ny << "\n255\n";
     // hitable* world = random_scene();
     // hitable* world = two_sphere();
-    hitable* world = two_perlin_sphere();
+    // hitable* world = two_perlin_sphere();
+    hitable* world = earth();
 
     vec3 lookfrom(13, 2, 3);
     vec3 lookat(0, 0, 0);
